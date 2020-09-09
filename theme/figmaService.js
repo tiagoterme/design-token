@@ -14,13 +14,23 @@ class FigmaService {
   async getFile() {
     try {
       const { data } = await this.apiFigma.get(`/files/${this.file}`)
-      return data
+      return await data
     } catch (err) {
       console.log(err)
     }
   }
+
+  async getThemes() {
+    const { document } = await this.getFile()
+    const theme = await document.children.filter(item => {
+      return item.name.includes('theme')
+    })
+
+    return theme;
+  }
 }
 
 const figma = new FigmaService()
-
-console.log(figma.getFile())
+figma.getThemes().then(theme => {
+  console.log(theme)
+})
