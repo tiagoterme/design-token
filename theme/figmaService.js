@@ -1,8 +1,10 @@
 const axios = require('axios')
+const fs = require('fs')
 
 class FigmaService {
   constructor() {
     this.file = 'e4QdD5hqDpNgaOOirG3xay'
+    this.themes = []
     this.apiFigma = axios.create({
       baseURL: 'https://api.figma.com/v1',
       headers: {
@@ -25,12 +27,41 @@ class FigmaService {
     const theme = await document.children.filter(item => {
       return item.name.includes('theme')
     })
+    this.theme = theme
+    this.writeTheme()
 
-    return theme;
+    return this.theme
+  }
+
+  formatColor(color){
+    return `rgba(${color.r*255},${color.g*255},${color.b*255},${color.a})`
+  }
+
+  getColors(theme) {
+    const colors = {}
+    const themeColors = theme.children.filter(item => item.name === 'colors')
+
+    themeColors[0].children.forEach(item =>{
+      colors[item.name] = this.formatColor(item.fills[0].color)
+    })
+
+    return colors
+  }
+
+
+  writeTheme() {
+    this.theme.forEach(theme => {
+      const themeFile = {}
+      themeFile.title = theme.name
+      themeFile.colors = this.getColors(theme)
+      console.log(__dirname);
+
+      fs.writeFileSync(`${themeFile.title}.json`, JSON.stringify(themeFile), 'utf8')
+    })
   }
 }
 
 const figma = new FigmaService()
 figma.getThemes().then(theme => {
-  console.log(theme)
+  // console.log(theme)
 })
