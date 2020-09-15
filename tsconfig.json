@@ -15,14 +15,13 @@
     "resolveJsonModule": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", "theme/figma.js"
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules"

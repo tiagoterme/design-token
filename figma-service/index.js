@@ -1,10 +1,9 @@
 const axios = require('axios')
-const fs = require('fs')
+const fs = require('fs-extra')
 
 class FigmaService {
   constructor() {
     this.file = 'e4QdD5hqDpNgaOOirG3xay'
-    this.themes = []
     this.apiFigma = axios.create({
       baseURL: 'https://api.figma.com/v1',
       headers: {
@@ -24,13 +23,11 @@ class FigmaService {
 
   async getThemes() {
     const { document } = await this.getFile()
-    const theme = await document.children.filter(item => {
+    const themes = await document.children.filter(item => {
       return item.name.includes('theme')
     })
-    this.theme = theme
-    this.writeTheme()
 
-    return this.theme
+    return themes
   }
 
   formatColor(color){
@@ -49,19 +46,22 @@ class FigmaService {
   }
 
 
-  writeTheme() {
-    this.theme.forEach(theme => {
+  writeTheme(themes) {
+    themes.forEach(theme => {
       const themeFile = {}
       themeFile.title = theme.name
       themeFile.colors = this.getColors(theme)
-      console.log(__dirname);
 
-      fs.writeFileSync(`${themeFile.title}.json`, JSON.stringify(themeFile), 'utf8')
+      fs.outputJsonSync(`./src/styles/${themeFile.title}.json`, themeFile)
+    })
+  }
+
+  syncTheme() {
+    this.getThemes().then(themes => {
+      this.writeTheme(themes)
     })
   }
 }
 
 const figma = new FigmaService()
-figma.getThemes().then(theme => {
-  // console.log(theme)
-})
+figma.syncTheme()
