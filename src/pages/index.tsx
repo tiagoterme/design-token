@@ -1,8 +1,14 @@
 import React from 'react'
-import styled from 'styled-components'
+import Title from '../components/title'
+import Text from '../components/text'
 
-export default function Home() {
+
+export default function Home({ data }) {
+
   return (
-    <div>Teste</div>
+    <>
+      <Title>Title</Title>
+      <Text>Meu textinho</Text>
+    </>
   )
 }

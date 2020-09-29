@@ -1,6 +1,7 @@
 const axios = require('axios')
 const fs = require('fs-extra')
 const colors = require('./colors')
+const typography = require('./typography')
 
 class FigmaService {
   constructor() {
@@ -36,6 +37,8 @@ class FigmaService {
       const themeFile = {}
       themeFile.title = theme.name
       themeFile.colors = colors.tokens(theme)
+      themeFile.typography = typography.tokens(theme)
+
 
       fs.outputJsonSync(`./src/styles/${themeFile.title}.json`, themeFile)
     })
