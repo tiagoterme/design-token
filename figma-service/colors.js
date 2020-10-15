@@ -13,8 +13,19 @@ class Colors {
     return `rgba(${this.parseColor(color.r)},${this.parseColor(color.g)},${this.parseColor(color.b)},${this.parseAlpha(color.a)})`
   }
 
+  parseNameColor(name, color) {
+    let obj = name.replace(/\s/g, '').split('/')
+      .concat(this.formatColor(color))
+      .reverse()
+      .reduce(function (a, b) {
+        return { [utils.toCamelCase(b)]: a }
+      })
+    return obj
+  }
+
+
   tokens(theme) {
-    const colors = {}
+    let colors = {}
     const themeColors = theme.children.filter(item => item.name === 'colors')
 
     themeColors[0].children.forEach(item => {
@@ -22,8 +33,9 @@ class Colors {
 
       if (fill.type === 'SOLID') {
         fill.color.a = fill.opacity ? fill.opacity : fill.color.a
+        const formatedColor = this.parseNameColor(item.name, fill.color)
 
-        colors[utils.toCamelCase(item.name)] = this.formatColor(fill.color)
+        colors = utils.mergeObj(colors, formatedColor)
       }
     })
 

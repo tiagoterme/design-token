@@ -5,7 +5,8 @@ const typography = require('./typography')
 
 class FigmaService {
   constructor() {
-    this.fileId = 'e4QdD5hqDpNgaOOirG3xay'
+    //https://www.figma.com/file/OaUQSRCtQaheYyxKxHlUWE/Style-guide?node-id=32%3A0
+    this.fileId = 'OaUQSRCtQaheYyxKxHlUWE'
     this.apiFigma = axios.create({
       baseURL: 'https://api.figma.com/v1',
       headers: {
@@ -35,10 +36,9 @@ class FigmaService {
   writeTheme(themes) {
     themes.forEach(theme => {
       const themeFile = {}
-      themeFile.title = theme.name
+      themeFile.title = theme.name.replace(/\s/g, '')
       themeFile.colors = colors.tokens(theme)
       themeFile.typography = typography.tokens(theme)
-
 
       fs.outputJsonSync(`./src/styles/${themeFile.title}.json`, themeFile)
     })

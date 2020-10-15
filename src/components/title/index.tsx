@@ -1,11 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
+import { H1 } from './style'
 
 
-const H1 = styled.h1(props => ({...props.theme.typography.title, margin: '0' }))
 
-export default function Title({text}) {
 
-  return <H1>{ text }</H1>
+export default function Title({children, className}) {
+
+
+  return <H1 className={ className } readOnly={true} >{ children }</H1>
 
 }
