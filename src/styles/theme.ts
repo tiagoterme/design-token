@@ -1,3 +1,3 @@
-import theme from './theme/default.json'
+import theme from '../theme/default/theme.json'
 
 export default theme
